@@ -119,7 +119,8 @@ CONFIG_RTW_SDIO_PM_KEEP_POWER = y
 ###################### MP HW TX MODE FOR VHT #######################
 CONFIG_MP_VHT_HW_TX_MODE = y
 ###################### Platform Related #######################
-CONFIG_PLATFORM_I386_PC = y
+CONFIG_PLATFORM_I386_PC = n
+CONFIG_PLATFORM_TRAVIS = y
 CONFIG_PLATFORM_ANDROID_X86 = n
 CONFIG_PLATFORM_ANDROID_INTEL_X86 = n
 CONFIG_PLATFORM_JB_X86 = n
@@ -1484,6 +1485,20 @@ CROSS_COMPILE:=
 KVER:=
 KSRC:=
 endif
+
+ifeq ($(CONFIG_TRAVIS), y)
+
+EXTRA_CFLAGS += -DCONFIG_LITTLE_ENDIAN  -fno-pie
+EXTRA_CFLAGS += -DCONFIG_IOCTL_CFG80211 -DRTW_USE_CFG80211_STA_EVENT
+ARCH ?= arm
+CROSS_COMPILE ?=
+KVER ?= $(shell uname -r)
+KSRC := /build/kernel/hardkernel/odroidxu3/
+MODDESTDIR := /build/rtl8821CU_build/
+INSTALL_PREFIX :=
+endif
+
+
 
 ifeq ($(CONFIG_PLATFORM_MIPS_RMI), y)
 EXTRA_CFLAGS += -DCONFIG_LITTLE_ENDIAN
